@@ -23,7 +23,7 @@ app = Flask(__name__)
 CORS(app)  # Permet les requêtes cross-origin
 
 # Chemin vers ton modèle Vosk français
-model_path = r"C:\Users\Mr.Adam's\Desktop\ODC\outils\python\vosk-model-fr-0.22"
+model_path = r"/home/ao627515/Projects/assistant/outils/vosk-model-fr-0.22"
 
 # Vérification de l'existence du modèle
 if not os.path.exists(model_path):
