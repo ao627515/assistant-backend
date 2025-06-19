@@ -1,0 +1,9 @@
+vosk
+requests
+Flask
+flask-cors
+gTTS
+pydub
+google-auth
+google-auth-oauthlib
+google-api-python-client
