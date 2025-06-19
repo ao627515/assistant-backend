@@ -1,3 +1,4 @@
+from features.check_balance import checkBalance
 import vosk
 import requests
 from flask import Flask, request, jsonify, send_file
@@ -80,6 +81,10 @@ def analyze_intent(text):
     elif any(word in text for word in ["météo", "temps qu'il fait", "pluie"]):
         return "Désolé, je ne peux pas encore consulter la météo en temps réel."
 
+    # Consultation de solde
+    elif any(phrase in text for phrase in ["solde", "mon solde", "combien j'ai", "consulter mon solde", "mon argent"]):
+        return checkBalance()
+    
     # Au revoir
     elif any(word in text for word in ["au revoir", "bye", "à bientôt"]):
         return "Au revoir ! À bientôt !"
