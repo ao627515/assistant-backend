@@ -94,3 +94,5 @@ credentials.json
 tmp/
 temp/
 *.tmp
+
+user_data.json
