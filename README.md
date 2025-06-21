@@ -82,6 +82,13 @@ Accès via : [http://localhost:5000](http://localhost:5000)
 - `GET /health` : Vérifie l’état de fonctionnement
 - `GET /demo` : Mini page web de test
 
+## Auteurs
+
+- [Tapsoba Faridatou](https://github.com/biabkaahfa)
+- [Ouédraogo Abdoul Aziz](https://github.com/ao627515)
+- [Simporé Elie](https://github.com/simporeelie)
+- [Sawadogo Adam Sharif](https://github.com/Oursdingo)
+
 ## Licence
 
 MIT — à adapter selon vos besoins.
