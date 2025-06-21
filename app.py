@@ -30,7 +30,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Modèle Vosk
-model_path = r"/home/ao627515/Projects/assistant/outils/vosk-model-fr-0.22"
+model_path = r"./tools/vosk-model-fr-0.22"
 if not os.path.exists(model_path):
     logger.error(f"Modèle Vosk introuvable : {model_path}")
     model = None
@@ -70,7 +70,7 @@ def load_user_data():
         "users": {
             "default": {
                 "nom": "Client Orange",
-                "telephone": "70123456",
+                "telephone": "74000000",
                 "solde_principal": 50000,
                 "credit_communication": 2500,
                 "internet_mb": 1024,
