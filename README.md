@@ -1,111 +1,87 @@
-# Assistant Vocal Orange Money - Backend
+# Assistant Vocal Orange Money – Backend
 
-Ce projet est un backend Python Flask pour un assistant vocal Orange Money, conçu pour répondre à des commandes vocales ou textuelles liées à la gestion de compte mobile money (solde, transferts, recharges, achats de forfaits, historique, bonus fidélité, etc.) au Burkina Faso.  
-Il s'interface avec des modèles NLP (spaCy, Vosk, llm local via Ollama) et génère des réponses audio via gTTS.
+Ce projet est le backend Python Flask d’un assistant vocal pour la gestion des services Orange Money, conçu pour comprendre des commandes vocales ou textuelles en français (Burkina Faso). Ce backend agit comme un simulateur de traitement pour un MVP (Minimum Viable Product) : **aucune transaction réelle n’est effectuée**. Il est interfacé avec des modèles NLP locaux (spaCy, Vosk, LLM via Ollama) pour interpréter les requêtes et répondre vocalement.
 
-> **Ce backend est conçu pour fonctionner avec des frontends séparés :**
+> Ce backend est utilisé avec deux interfaces frontend indépendantes :
 >
 > - [assistant-frontend-react](https://github.com/ao627515/assistant-frontend-react.git)
 > - [assistant-frontend-ionic](https://github.com/ao627515/assistant-frontend-ionic.git)
 
-> **Lien du dépôt backend :**  
-> [assistant-backend](https://github.com/ao627515/assistant-backend.git)
-
 ## Fonctionnalités principales
 
-- Analyse de texte en français pour comprendre les demandes Orange Money
-- Synthèse vocale des réponses (gTTS)
-- Reconnaissance vocale (Vosk, à intégrer côté frontend)
-- Gestion simple des utilisateurs et transactions (stockage JSON)
-- API REST pour traitement des requêtes et récupération des fichiers audio
-- Prise en charge des CORS pour intégration facile avec des frontends web/mobile
+- Analyse du langage naturel en français (spaCy)
+- Génération vocale des réponses (gTTS + pydub)
+- Simulation des traitements Orange Money : solde, recharges, forfaits, historique...
+- Intégration d’un LLM local (via [Ollama](https://ollama.com/)) pour l’assistant généraliste
+- API REST (JSON) pour les échanges avec les clients web ou mobiles
+- Prise en charge CORS pour une intégration multi-frontend
 
 ## Structure du projet
 
 ```
 .
-├── app.py                # Backend Flask principal
-├── req.txt               # Dépendances Python
-├── responses/            # Fichiers audio générés (.mp3)
-├── tools/                # (Modèles Vosk, etc.)
-├── .gitignore
+├── app.py                  # Backend principal
+├── req.txt                # Fichier des dépendances Python
+├── responses/             # Réponses vocales générées (.mp3)
+├── tools/                 # Modèles vocaux (ex : Vosk)
+├── users_data.json        # Données utilisateurs simulées (auto-créé)
 └── ...
 ```
 
-## Installation
+## Installation et Configuration
 
 1. **Cloner le dépôt**
 
-```sh
+```bash
 git clone https://github.com/ao627515/assistant-backend.git
 cd assistant-backend
 ```
 
-2. **Installer les dépendances**
+2. **Créer un environnement virtuel et installer les dépendances**
 
-Créez un environnement virtuel puis installez les paquets requis :
-
-```sh
+```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r req.txt
 ```
 
-3. **Télécharger le modèle spaCy français**
+3. **Télécharger les modèles requis**
 
-```sh
+```bash
 python -m spacy download fr_core_news_md
 ```
 
-4. **Installer ffmpeg (pour pydub/gTTS)**
+4. **Installer ffmpeg** (nécessaire pour pydub/gTTS)
 
-Sur Ubuntu/Debian :
-
-```sh
-sudo apt-get install ffmpeg
+```bash
+sudo apt install ffmpeg
 ```
 
-5. **Télécharger le modèle Vosk français**
+5. **Télécharger le modèle Vosk FR**
+   Depuis [https://alphacephei.com/vosk/models](https://alphacephei.com/vosk/models) et placer dans `tools/vosk-model-fr-0.22`
 
-Téléchargez le modèle depuis https://alphacephei.com/vosk/models et placez-le dans `tools/vosk-model-fr-0.22`.
+6. **(Optionnel) Intégration LLM via Ollama**
 
-6. **(Optionnel) LLM local via Ollama pour réponses avancées**
+- Installer Ollama sur [https://ollama.com](https://ollama.com)
+- Lancer `ollama run gemma:2b` (ou autre modèle)
+- Le backend interrogera Ollama via `localhost:11434`
 
-Le backend peut utiliser un LLM local via [Ollama](https://ollama.com/).  
-Par défaut, le modèle utilisé est `gemma:2b`, mais vous pouvez le changer selon vos besoins.  
-Ollama doit être installé et lancé sur `localhost:11434` avec le modèle souhaité chargé.
+## Démarrage du serveur
 
-## Lancement du serveur
-
-```sh
-python app.py
+```bash
 flask run
 ```
 
-Le serveur sera accessible sur [http://localhost:5000](http://localhost:5000).
+Accès via : [http://localhost:5000](http://localhost:5000)
 
-## Endpoints principaux
+## Endpoints API
 
-- `POST /process` : Analyse une demande texte, retourne la réponse et l'ID audio
-- `GET /audio/<audio_id>` : Récupère le fichier audio généré
-- `GET /solde` : Retourne le solde de l'utilisateur par défaut
-- `GET /health` : Vérifie l'état des services
-- `GET /demo` : Page de démonstration web simple
-
-## Utilisation avec les frontends
-
-Utilisez ce backend avec l'un des frontends suivants :
-
-- [assistant-frontend-react](https://github.com/ao627515/assistant-frontend-react.git)
-- [assistant-frontend-ionic](https://github.com/ao627515/assistant-frontend-ionic.git)
-
-## Remarques
-
-- Les fichiers audio générés sont stockés dans le dossier `responses/`.
-- Les données utilisateurs sont stockées dans `users_data.json` (créé automatiquement).
-- Les modèles spaCy et Vosk doivent être installés localement.
-- Les logs sont affichés en console pour le debug.
+- `POST /process` : Traitement d'une requête utilisateur (texte) → réponse + ID audio
+- `GET /audio/<audio_id>` : Récupération du fichier audio
+- `GET /solde` : Renvoie un solde simulé
+- `GET /health` : Vérifie l’état de fonctionnement
+- `GET /demo` : Mini page web de test
 
 ## Licence
 
-Projet sous licence MIT (à adapter selon votre besoin).
+MIT — à adapter selon vos besoins.
